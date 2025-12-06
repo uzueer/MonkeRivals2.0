@@ -1,0 +1,28 @@
+# Dependency/Build Artifacts
+**/node_modules
+**/dist
+**/build
+.git
+.gitignore
+npm-debug.log
+.npmrc
+
+# Development Tools/Cache
+.vscode
+.idea
+.DS_Store
+*.swp
+*.log
+
+# Sensitive/Configuration Files (CRITICAL)
+# Exclude the environment variables and private key from the build context
+# as they will be mounted or injected securely later.
+
+# Exclude the client's .env file
+client/.env
+
+# Exclude the server's .env file
+server/.env
+
+# Exclude the private Firebase service account key
+server/serviceAccountKey.json

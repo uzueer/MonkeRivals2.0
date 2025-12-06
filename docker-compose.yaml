@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  client:
+    container_name: nginx_proxy
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - app-network
+
+  server:
+    container_name: node_server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    expose:
+      - "3000"
+    env_file:
+      - ./server/.env
+    environment:
+      REDIS_URI: redis://redis:6379
+    volumes:
+      # Mount the Firebase Key
+      - ./server/serviceAccountKey.json:/app/serviceAccountKey.json:ro
+      - /app/node_modules
+    depends_on:
+      - redis
+    networks:
+      - app-network
+
+  redis:
+    container_name: redis_cache
+    image: redis:6-alpine
+    expose:
+      - "6379"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
